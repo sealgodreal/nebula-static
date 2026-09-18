@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             await navigator.serviceWorker.register("/lab.js", {
-                scope: "/service/",
+                scope: "/skibidi/", // can be LITERALLY anything other than /service/
             });
         } catch (error) {
             console.error("Service worker registration failed:", error);
