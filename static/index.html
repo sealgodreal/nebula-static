@@ -8,12 +8,20 @@
 		/>
 		<title>Home - Classroom</title>
 		<link rel="icon" type="image/png" href="assets/gclassroom.png" />
-		<script src="/scram/scramjet.all.js"></script>
-		<script src="/baremux/index.js"></script>
 		<link rel="stylesheet" href="index.css" />
-		<script src="register-sw.js" defer></script>
-		<script src="search.js" defer></script>
-		<script src="index.js" defer></script>
+
+    	<script src="/baremux/index.js" defer></script>
+    	<script src="/wk/wk2.js" defer></script>
+    	<script src="/wk/wk3.js" defer></script>
+    	<script src="/assets/js/index.js" defer></script>
+    	<script src="/assets/js/register.js" defer></script>
+
+		<script>
+  		if (window.location.pathname === "/index.html") {
+    		window.location.pathname = "/";
+  		}
+		</script>
+
 	</head>
 	<body>
 <div id="browser-toolbar">
@@ -108,24 +116,21 @@
 
 		<div class="subtitle-wrapper"><p id="nebula-subtitle"></p></div>
 
-		<form id="sj-form" class="flex-center">
-			<input
-				id="sj-search-engine"
-				value="https://duckduckgo.com/?q=%s&ia=web"
-				type="hidden"
-			/>
+		<form id="form" class="flex-center">
 			<div class="search-box">
 				<svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
 					<circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/>
 					<path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
 				</svg>
+
 				<input
-					id="sj-address"
+					id="address"
 					type="text"
 					placeholder="Search or enter URL"
 					autocomplete="off"
 					spellcheck="false"
 				/>
+
 				<button class="search-btn" type="submit" title="Search" aria-label="Search">
 					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
 						<path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
