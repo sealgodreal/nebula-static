@@ -111,6 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             proxyFrame.setAttribute("allowfullscreen", "true");
 
+            proxyFrame.setAttribute(
+                "sandbox",
+                "allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-orientation-lock allow-modals allow-top-navigation allow-downloads"
+            );
+
             document.body.appendChild(proxyFrame);
 
             proxyFrame.addEventListener("load", updateNavigationState);
@@ -119,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const encodedUrl = __uv$config.encodeUrl(url);
 
         const proxyUrl =
-            window.location.origin +
             "/service/" +
             encodedUrl;
 
