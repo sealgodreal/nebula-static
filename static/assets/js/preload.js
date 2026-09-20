@@ -1,13 +1,49 @@
 window.onload = async function () {
   let scope;
+  try {
+    if (location.hostname.endsWith(".vercel.app")) {
+      localStorage.setItem("isVercel", "true");
+    }
+  } catch {
+  }
   const wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/";
   const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
   const allowedHosts = ["localhost", "127.0.0.1"];
   function isMobile() {
     return /android|iphone|kindle|ipad/i.test(navigator.userAgent);
   }
-  function isVercel() {
-    return location.hostname.endsWith(".vercel.app");
+  function isVercelHost() {
+    return location.hostname.endsWith(".vercel.app") || localStorage.getItem("isVercel") === "true";
+  }
+  function createDomainRegex(domains) {
+    const escapedDomains = domains.map((domain) => domain.replace(/\./g, "\\."));
+    return new RegExp(escapedDomains.join("|") + "(?=[/\\s]|$)", "i");
+  }
+  async function resolveScope() {
+    if (isMobile() || isVercelHost()) {
+      return "/assignments/";
+    }
+    try {
+      const response = await fetch("/data/b-list.json");
+      const data = await response.json();
+      const domains = data.domains || data;
+      const domainRegex = createDomainRegex(domains);
+      const stored = localStorage.getItem("targeturl");
+      let decoded = stored || "";
+      try {
+        if (typeof Ultraviolet !== "undefined" && Ultraviolet.codec && Ultraviolet.codec.xor) {
+          decoded = Ultraviolet.codec.xor.decode(stored);
+        }
+      } catch {
+        decoded = stored || "";
+      }
+      if (decoded && domainRegex.test(decoded)) {
+        return "/assignments/";
+      }
+    } catch (error) {
+      console.warn("Could not resolve proxy scope, defaulting to /service/:", error);
+    }
+    return "/service/";
   }
   async function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) {
@@ -19,11 +55,7 @@ window.onload = async function () {
     await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
     await navigator.serviceWorker.register("/sw.js", { scope: "/service/" });
     await navigator.serviceWorker.register("/lab.js", { scope: "/assignments/" });
-    if (isMobile() || isVercel()) {
-      scope = "/assignments/";
-    } else {
-      scope = "/service/";
-    }
+    scope = await resolveScope();
   }
   function loadFrame() {
     const targetUrl = localStorage.getItem("targeturl");
@@ -55,7 +87,12 @@ window.onload = async function () {
     iframe.style.display = "block";
     iframe.style.touchAction = "auto";
     document.body.appendChild(iframe);
-    iframe.src = "/service/" + targetUrl;
+    const useScope = scope || "/service/";
+    try {
+      localStorage.setItem("proxyScope", useScope);
+    } catch {
+    }
+    iframe.src = useScope + targetUrl;
   }
   try {
     await registerServiceWorker();

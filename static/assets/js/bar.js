@@ -10,6 +10,58 @@ const TARGET_URL = "targeturl";
 const HISTORY_KEY = "browserHistory";
 const HISTORY_INDEX_KEY = "browserHistoryIndex";
 const SERVICE_PREFIX = "/service/";
+const ASSIGNMENTS_PREFIX = "/assignments/";
+
+function isMobileDevice() {
+  return /android|iphone|kindle|ipad/i.test(navigator.userAgent);
+}
+
+function isVercelHost() {
+  try {
+    return location.hostname.endsWith(".vercel.app") || localStorage.getItem("isVercel") === "true";
+  } catch {
+    return false;
+  }
+}
+
+function activePrefix() {
+  try {
+    const stored = localStorage.getItem("proxyScope");
+    if (stored === ASSIGNMENTS_PREFIX || stored === SERVICE_PREFIX) return stored;
+  } catch {
+  }
+  if (isMobileDevice() || isVercelHost()) return ASSIGNMENTS_PREFIX;
+  return SERVICE_PREFIX;
+}
+
+function rememberPrefix(prefix) {
+  try {
+    if (prefix === ASSIGNMENTS_PREFIX || prefix === SERVICE_PREFIX) {
+      localStorage.setItem("proxyScope", prefix);
+    }
+  } catch {
+  }
+}
+
+function createDomainRegex(domains) {
+  const escapedDomains = domains.map((domain) => domain.replace(/\./g, "\\."));
+  return new RegExp(escapedDomains.join("|") + "(?=[/\\s]|$)", "i");
+}
+
+async function resolvePrefixForUrl(decodedUrl) {
+  if (isMobileDevice() || isVercelHost()) return ASSIGNMENTS_PREFIX;
+  try {
+    const response = await fetch("/data/b-list.json");
+    const data = await response.json();
+    const domains = data.domains || data;
+    if (decodedUrl && createDomainRegex(domains).test(decodedUrl)) {
+      return ASSIGNMENTS_PREFIX;
+    }
+  } catch (error) {
+    console.warn("Could not resolve proxy scope, defaulting to /service/:", error);
+  }
+  return SERVICE_PREFIX;
+}
 
 function encodeUrl(url) {
   if (!url) return url;
@@ -144,16 +196,18 @@ function initializeHistory() {
   }
 }
 
-async function loadEncodedUrl(encodedUrl) {
+async function loadEncodedUrl(encodedUrl, prefix) {
   if (!encodedUrl) return;
   localStorage.setItem(TARGET_URL, encodedUrl);
+  const usePrefix = prefix || activePrefix();
+  rememberPrefix(usePrefix);
   lastSyncedEncoded = encodedUrl;
   const frame = getBrowserFrame() || await waitForFrame();
   if (!frame) {
     console.warn("Could not find browserframe.");
     return;
   }
-  frame.src = SERVICE_PREFIX + encodedUrl;
+  frame.src = usePrefix + encodedUrl;
   if (browserUrl) {
     try {
       browserUrl.value = decodeUrl(encodedUrl);
@@ -171,9 +225,11 @@ async function navigateTo(url) {
     url = "https://" + url;
   }
   const encoded = encodeUrl(url);
+  const prefix = await resolvePrefixForUrl(url);
+  rememberPrefix(prefix);
   localStorage.setItem(TARGET_URL, encoded);
   addToHistory(encoded);
-  await loadEncodedUrl(encoded);
+  await loadEncodedUrl(encoded, prefix);
 }
 
 if (backBtn) {
@@ -220,7 +276,7 @@ if (reloadBtn) {
       frame.contentWindow.location.reload();
     } catch {
       const current = localStorage.getItem(TARGET_URL);
-      if (current) frame.src = SERVICE_PREFIX + current;
+      if (current) frame.src = activePrefix() + current;
     }
   });
 }
@@ -336,8 +392,9 @@ waitForFrame().then(function (frame) {
   if (!frame) return;
   const target = localStorage.getItem(TARGET_URL);
   lastSyncedEncoded = target;
-  if (target && frame.getAttribute("src") !== SERVICE_PREFIX + target) {
-    frame.src = SERVICE_PREFIX + target;
+  const prefix = activePrefix();
+  if (target && frame.getAttribute("src") !== prefix + target) {
+    frame.src = prefix + target;
   }
   updateBrowserUrl();
   updateButtons();
