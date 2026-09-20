@@ -6,7 +6,6 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 import { createBareServer } from "@tomphttp/bare-server-node";
 import { uvPath } from "@titaniumnetwork-dev/ultraviolet";
 import wisp from "wisp-server-node";
-import packageJson from './package.json' with { type: 'json' };
 
 const __dirname = path.resolve();
 const server = http.createServer();
@@ -25,6 +24,10 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use("/uv/", express.static(uvPath));
 app.use("/epoxy/", express.static(epoxyPath));
 app.use("/baremux/", express.static(baremuxPath));
+
+app.get('/assignment', (req, res) => {
+  res.redirect('/lesson.html');
+});
 
 app.use((req, res) => {
   res.statusCode = 404;
@@ -51,7 +54,7 @@ server.on('listening', () => {
   console.log("     \x1b[38;5;117mhttp://localhost:" + PORT + "\x1b[0m");
   console.log("     \x1b[38;5;117mhttp://127.0.0.1:" + PORT + "\x1b[0m");
   console.log("     \x1b[38;5;117mhttp://0.0.0.0:" + PORT + "\x1b[0m");
-  console.log("\x1b[38;5;238m\n    best unbl0cker - by seal\x1b[0m");
+  console.log("\x1b[38;5;238m\n   best unbl0cker - by seal\x1b[0m");
 });
 
 function shutdown(signal) {

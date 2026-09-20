@@ -19,11 +19,47 @@
       z-index: 1;
       pointer-events: none;
     }
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.12);
+      border-top-color: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-bottom: 28px;
+    }
+    .loading-text {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-align: center;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
   <div id="vanta"></div>
   <canvas id="stars"></canvas>
+  <div id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">loading, be patient.</div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
   <script>
