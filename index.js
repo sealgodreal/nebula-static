@@ -27,8 +27,16 @@ app.use("/epoxy/", express.static(epoxyPath));
 app.use("/libcurl/", express.static(libcurlPath));
 app.use("/baremux/", express.static(baremuxPath));
 
-app.get('/assignment', (req, res) => {
-  res.redirect('/lesson.html');
+app.get('/math', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'lesson.html'));
+});
+
+app.get('/algebra', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'settings.html'));
+});
+
+app.get('/reading', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static', 'class.html'));
 });
 
 app.use((req, res) => {

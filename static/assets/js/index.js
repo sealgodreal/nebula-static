@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!url) return;
     const encodedUrl = __uv$config.encodeUrl(url);
     localStorage.setItem("targeturl", encodedUrl);
-    window.location.href = "/assignment";
+    window.location.href = "/math";
   }
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
