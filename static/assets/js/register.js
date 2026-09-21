@@ -14,7 +14,16 @@ async function registerSW() {
     throw new Error("Your browser doesn't support service workers.");
   }
 
-  await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+  if (typeof nebulaSetTransport === "function") {
+    await nebulaSetTransport(connection, wispUrl);
+  } else {
+    try {
+      await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+    } catch (err) {
+      console.warn("Epoxy failed on home page, trying libcurl fallback:", err);
+      await connection.setTransport("/libcurl/index.mjs", [{ wisp: wispUrl }]);
+    }
+  }
   await window.navigator.serviceWorker.register("/sw.js", {
     scope: '/service/',
   });

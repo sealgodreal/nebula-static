@@ -293,7 +293,11 @@ if (browserUrl) {
     } else if (value.includes(".") && !value.includes(" ")) {
       url = "https://" + value;
     } else {
-      url = "https://duckduckgo.com/?q=" + encodeURIComponent(value) + "&ia=web";
+      if (typeof nebulaSearchUrl === "function") {
+        url = nebulaSearchUrl(value);
+      } else {
+        url = "https://duckduckgo.com/?q=" + encodeURIComponent(value) + "&ia=web";
+      }
     }
     await navigateTo(url);
     browserUrl.blur();
@@ -405,6 +409,7 @@ const toolbarMenu = document.getElementById("toolbar-menu");
 const menuReturn = document.getElementById("menu-return");
 const menuCloak = document.getElementById("menu-cloak");
 const menuFullscreen = document.getElementById("menu-fullscreen");
+const menuSettings = document.getElementById("menu-settings");
 
 function isToolbarMenuOpen() {
   return Boolean(toolbarMenu) && !toolbarMenu.hasAttribute("hidden");
@@ -423,6 +428,10 @@ function closeToolbarMenu() {
 }
 
 function cloakSite() {
+  if (typeof cloakNebulaSite === "function") {
+    cloakNebulaSite();
+    return;
+  }
   const origin = window.location.origin;
   const safeOrigin = String(origin).replace(/"/g, "");
   const popup = window.open("about:blank", "_blank");
@@ -445,6 +454,7 @@ function cloakSite() {
   } catch (error) {
     console.warn("Could not cloak site:", error);
   }
+  if (typeof nebulaSuspendAntiClose === "function") nebulaSuspendAntiClose();
   window.location.replace("https://www.google.com");
 }
 
@@ -500,6 +510,7 @@ if (menuReturn) {
     event.preventDefault();
     event.stopPropagation();
     closeToolbarMenu();
+    if (typeof nebulaSuspendAntiClose === "function") nebulaSuspendAntiClose();
     window.location.href = "/";
   });
 }
@@ -519,6 +530,16 @@ if (menuFullscreen) {
     event.stopPropagation();
     closeToolbarMenu();
     toggleFullscreen();
+  });
+}
+
+if (menuSettings) {
+  menuSettings.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    closeToolbarMenu();
+    if (typeof nebulaSuspendAntiClose === "function") nebulaSuspendAntiClose();
+    window.location.href = "/settings.html";
   });
 }
 

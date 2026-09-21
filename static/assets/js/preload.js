@@ -52,7 +52,11 @@ window.onload = async function () {
     if (location.protocol !== "https:" && !allowedHosts.includes(location.hostname)) {
       throw new Error("Service works cannot be registered without https.");
     }
-    await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+    if (typeof nebulaSetTransport === "function") {
+      await nebulaSetTransport(connection, wispUrl);
+    } else {
+      await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+    }
     await navigator.serviceWorker.register("/sw.js", { scope: "/service/" });
     await navigator.serviceWorker.register("/lab.js", { scope: "/assignments/" });
     scope = await resolveScope();

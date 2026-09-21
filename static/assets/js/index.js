@@ -21,7 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let url = input.trim();
     if (!url) return null;
     if (!isUrl(url)) {
-      url = "https://duckduckgo.com/?q=" + encodeURIComponent(url) + "&ia=web";
+      if (typeof nebulaSearchUrl === "function") {
+        url = nebulaSearchUrl(url);
+      } else {
+        url = "https://duckduckgo.com/?q=" + encodeURIComponent(url) + "&ia=web";
+      }
     } else if (!url.startsWith("https://") && !url.startsWith("http://")) {
       url = "https://" + url;
     }

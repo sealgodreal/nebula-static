@@ -360,36 +360,28 @@ body {
 }
 
 .logo {
-  height: 18vh;
-  height: 18dvh;
-  min-height: 72px;
-  max-height: 180px;
-  max-width: 80vw;
-  width: auto;
+  width: min(46vw, 260px);
+  height: auto;
+  max-height: 24vh;
+  max-height: 24dvh;
   object-fit: contain;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   flex-shrink: 0;
 }
 
 .subtitle-wrapper {
   width: min(560px, 92vw);
-  margin: -8px auto 18px;
+  margin: 14px auto 0;
   text-align: center;
 }
 
 #nebula-subtitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 13px;
-  font-weight: 300;
+  color: rgba(240, 240, 240, 0.8);
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: 0.01em;
-  cursor: pointer;
   user-select: none;
-  transition: opacity 0.25s ease, color 0.25s ease;
-}
-
-#nebula-subtitle:hover {
-  color: rgba(255, 255, 255, 0.78);
 }
 
 #form {
@@ -555,11 +547,10 @@ body {
     margin-top: 0;
   }
   .logo {
-    max-width: 80vw;
+    width: min(66vw, 240px);
     height: auto;
-    max-height: 18vh;
-    max-height: 18dvh;
-    min-height: 0;
+    max-height: 22vh;
+    max-height: 22dvh;
   }
   .subtitle-wrapper {
     width: 94vw;
@@ -572,9 +563,10 @@ body {
     padding-bottom: 12px;
   }
   .logo {
-    min-height: 48px;
-    max-height: 12vh;
-    max-height: 12dvh;
+    width: min(36vw, 180px);
+    height: auto;
+    max-height: 20vh;
+    max-height: 20dvh;
     margin-bottom: 12px;
   }
   .subtitle-wrapper {
@@ -595,4 +587,260 @@ body {
   #nebula-subtitle {
     transition: none;
   }
+}
+
+#topbar {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(920px, calc(100% - 28px));
+  box-sizing: border-box;
+  padding: 9px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 20;
+  background: rgba(26, 26, 30, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.topbar-brand img {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbar-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.topbar-btn:hover {
+  opacity: 0.75;
+}
+
+.topbar-btn svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
+.center-stack {
+  padding-top: calc(84px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+.whoami-link {
+  position: fixed;
+  left: 18px;
+  bottom: 16px;
+  z-index: 10;
+  color: rgba(210, 210, 210, 0.85);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  #topbar {
+    padding: 6px 14px;
+  }
+  .topbar-brand {
+    font-size: 16px;
+  }
+  .topbar-actions {
+    gap: 14px;
+  }
+}
+
+.settings-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(84px + 24px) 16px 32px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.settings-page::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.settings-wrap {
+  width: min(880px, 94vw);
+}
+
+.settings-title {
+  margin: 0;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.settings-sub {
+  margin: 8px 0 22px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .settings-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.setting-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 22px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(26, 26, 30, 0.6);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.setting-card h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.setting-card p {
+  margin: 14px 0 0;
+  flex: 1;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.card-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pill {
+  padding: 9px 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font: 400 13px "Roboto", Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.pill:hover {
+  border-color: #fff;
+}
+
+.pill.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+  color: #161616;
+}
+
+.switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.switch .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #888;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.switch.on {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.switch.on .knob {
+  transform: translateX(18px);
+  background: #fff;
+}
+
+.settings-status {
+  display: block;
+  margin-top: 18px;
+  min-height: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  text-align: center;
 }

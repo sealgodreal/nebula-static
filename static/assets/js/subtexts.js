@@ -1,4 +1,5 @@
 const nebulaSubtexts = [
+  "welcome to nebula!",
   "usenebula.netlify.app",
   "join our discord! (.gg/gCTFQZK6C6)",
   "sub to our youtube! (@nebulaunblocking)",
@@ -6,20 +7,48 @@ const nebulaSubtexts = [
   "best unblocker!",
   "nebula on top",
   "sudo rm -rf --no-preserve-root /*",
-  "sudo apt install opsec"
+  "sudo apt install opsec",
+  "def not vibecoded",
+  "\"yo darren\"",
+  "is nebula static the best unblocker?",
+  "you are on nebula static! join the discord to use the full ver (games, apps, etc)",
+  "\"should i add an ip logger?\" - nitrix",
+  "nebula is PEAK, and so are you for using it!",
+  "fully unblocked! i think..",
+  "is this opsec??",
+  "uv.holyubofficial.net the best bare server",
+  "nebula > schoolwork",
+  "first ever neb version was 100% gpt lmao",
+  "nebula > securly > goguardian > lightspeed > linewize > blocksi",
+  "FUCK network filters",
+  "the year JUST started and im already failing ela",
+  "port 3000 > port 8080",
+  "fucking LOVE my hb ❤️ (no homo)",
+  "yea i like mangos. wait, mango?",
+  "ssh root@67.67.67.67",
+  "how did you guys GENUINELY manage to use up 1TB of proxy data in 3 weeks ✌",
+  "websockets?",
+  "cloudflare?",
+  "dude my vps tweaked out yesterday (9/19/26)",
+  "if youre seeing this, you are now a catboy",
+  "no",
+  "yes",
+  "frogiee1 PLEASE teach me your ways",
+  "\"yo seal can i use ur vps for obfuscator bot\" - blast",
+  "no subtext for you",
+  "fuck now.gg",
+  "\"teh fuck that mean\" - jair",
+  "you can play roblox using nowgg.fun!",
+  "you should enable anti-close + auto about:blank cloaking",
+  "\"whats the difference between a vpn and a vps?\"",
+  "you guys are goated ❤️",
+  "is this hosted on vercel?",
+  "1.1.1.1 > 1.0.0.1",
+  "ethernet > wifi",
+  "digbar so tuff boiiii",
+  "use soundcloud if you want to listen to music!",
+  "\"doctor coconut\"",
 ];
+
 const subtitle = document.getElementById("nebula-subtitle");
-let subtitleIndex = Math.floor(Math.random() * nebulaSubtexts.length);
-subtitle.textContent = nebulaSubtexts[subtitleIndex];
-subtitle.addEventListener("click", () => {
-  let newIndex;
-  do {
-    newIndex = Math.floor(Math.random() * nebulaSubtexts.length);
-  } while (newIndex === subtitleIndex && nebulaSubtexts.length > 1);
-  subtitleIndex = newIndex;
-  subtitle.style.opacity = "0";
-  setTimeout(() => {
-    subtitle.textContent = nebulaSubtexts[subtitleIndex];
-    subtitle.style.opacity = "1";
-  }, 150);
-});
+subtitle.textContent = nebulaSubtexts[Math.floor(Math.random() * nebulaSubtexts.length)];
