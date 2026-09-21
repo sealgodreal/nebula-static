@@ -127,7 +127,6 @@
       const now = document.getElementById("cloak-now");
       if (now) {
         now.addEventListener("click", () => {
-          try { sessionStorage.setItem("nebula_autocloaked", "1"); } catch {}
           cloakNebulaSite();
         });
       }

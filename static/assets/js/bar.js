@@ -432,8 +432,15 @@ function cloakSite() {
     cloakNebulaSite();
     return;
   }
-  const origin = window.location.origin;
-  const safeOrigin = String(origin).replace(/"/g, "");
+  const targetUrl = (() => {
+    try {
+      const href = window.location.href;
+      if (/^https?:\/\//i.test(href)) return href;
+    } catch {}
+    try { return window.location.origin + "/"; } catch {}
+    return "/";
+  })();
+  const safeUrl = String(targetUrl).replace(/"/g, "");
   const popup = window.open("about:blank", "_blank");
   if (!popup) return;
   try {
@@ -441,10 +448,12 @@ function cloakSite() {
     popup.document.write(
       '<!doctype html><html><head><meta charset="utf-8" />' +
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />' +
-        "<style>html,body{margin:0;padding:0;width:100%;height:100%;background:#fff;overscroll-behavior:none}" +
-        "iframe{display:block;position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;border:0;touch-action:auto}</style>" +
+        "<title>Home - Classroom</title>" +
+        "<style>html,body{margin:0!important;padding:0!important;width:100%;height:100%;overflow:hidden!important;background:#fff;overscroll-behavior:none}" +
+        "body{position:fixed!important;top:0!important;left:0!important;width:100%!important;height:100%!important;overflow:hidden!important}" +
+        "iframe{position:fixed!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;height:100svh!important;border:0!important;display:block!important;touch-action:auto}</style>" +
         '</head><body><iframe src="' +
-        safeOrigin +
+        safeUrl +
         '" title="content" allow="fullscreen; autoplay; clipboard-write" allowfullscreen></iframe></body></html>'
     );
     popup.document.close();
@@ -453,9 +462,13 @@ function cloakSite() {
     } catch {}
   } catch (error) {
     console.warn("Could not cloak site:", error);
+    return;
   }
   if (typeof nebulaSuspendAntiClose === "function") nebulaSuspendAntiClose();
-  window.location.replace("https://www.google.com");
+  setTimeout(() => {
+    try { window.location.replace("https://www.google.com"); }
+    catch { try { window.location.href = "https://www.google.com"; } catch {} }
+  }, 200);
 }
 
 async function toggleFullscreen() {
